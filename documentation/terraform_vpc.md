@@ -18,7 +18,7 @@ After successful deployment, we tore everything down using `terraform destroy` t
 
 ## Deployment Preview
 
-Preview (autoplay, muted):
+Preview (note: autoplay may be blocked by some browsers):
 
 <video src="./videos/terraform_vpc_aws.mp4" controls autoplay muted playsinline loop style="max-width:100%;height:auto;">
   Your browser does not support the video tag. Download: <a href="./videos/terraform_vpc_aws.mp4">terraform_vpc_aws.mp4</a>
@@ -111,7 +111,12 @@ Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ### Outputs
 
 ```text
-subnet_id = "subnet-0993b303bd3de511e"
+nat_eip_id = "eipalloc-0e7d95dc5cc58b426"
+nat_gateway_id = "nat-0da70d7bec7ec876e"
+private_subnet_id = "subnet-03acbee65e2de8229"
+public_subnet_id = "subnet-078d0269f85ba4de3"
+security_group_id = "sg-0b35bf43fa418592c"
+vpc_id = "vpc-099a9dabb8cbd28c7"
 ```
 
 ### AWS Resources Created
