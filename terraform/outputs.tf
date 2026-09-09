@@ -1,29 +1,65 @@
 output "vpc_id" {
-  description = "The ID of the created VPC"
-  value       = aws_vpc.numeraid_k8s_vpc.id
+  description = "The VPC ID created by the networking module."
+  value       = module.networking.vpc_id
+}
+
+output "vpc_cidr_block" {
+  description = "The VPC CIDR block created by the networking module."
+  value       = module.networking.vpc_cidr_block
 }
 
 output "public_subnet_id" {
-  description = "The ID of the created public subnet"
-  value       = aws_subnet.numeraid_k8s_public_subnet.id
+  description = "The public subnet ID created by the networking module."
+  value       = module.networking.public_subnet_id
 }
 
 output "private_subnet_id" {
-  description = "The ID of the created private subnet"
-  value       = aws_subnet.numeraid_k8s_private_subnet.id
+  description = "The private subnet ID created by the networking module."
+  value       = module.networking.private_subnet_id
+}
+
+output "internet_gateway_id" {
+  description = "The internet gateway ID created by the networking module."
+  value       = module.networking.internet_gateway_id
+}
+
+output "public_route_table_id" {
+  description = "The public route table ID created by the networking module."
+  value       = module.networking.public_route_table_id
+}
+
+output "private_route_table_id" {
+  description = "The private route table ID created by the networking module."
+  value       = module.networking.private_route_table_id
 }
 
 output "nat_gateway_id" {
-  description = "The ID of the NAT Gateway (if created)"
-  value       = aws_nat_gateway.numeraid_k8s_nat_gateway.id
-  sensitive   = false
+  description = "The NAT gateway ID created by the networking module."
+  value       = module.networking.nat_gateway_id
 }
 
-output "nat_eip_id" {
-  description = "The EIP allocation ID for the NAT Gateway"
-  value       = aws_eip.numeraid_k8s_nat_eip.id
+output "nat_public_ip" {
+  description = "The NAT gateway public IP created by the networking module."
+  value       = module.networking.nat_public_ip
 }
 
 output "security_group_id" {
-  value = aws_security_group.numeraid_k8s_sg.id
+  description = "The Kubernetes security group ID created by the security module."
+  value       = module.security.security_group_id
+}
+
+output "control_plane_id" {
+  description = "The control-plane instance ID created by the compute module."
+  value       = module.compute.control_plane_id
+}
+
+output "worker_node_id" {
+  description = "The worker node instance ID created by the compute module."
+  value       = module.compute.worker_node_id
+}
+
+output "private_key_pem" {
+  description = "Private key material used to SSH into the EC2 instances (sensitive)."
+  value       = module.compute.private_key_pem
+  sensitive   = true
 }

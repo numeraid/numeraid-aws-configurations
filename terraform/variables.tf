@@ -1,71 +1,98 @@
 variable "aws_region" {
+  description = "AWS Region where resources will be deployed."
   type        = string
-  description = "AWS region to create resources in (e.g. af-south-1)"
-  default     = "af-south-1"
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.aws_region)) > 0
+    error_message = "aws_region must not be empty."
+  }
+}
+
+variable "project_name" {
+  description = "Project name used in resource naming and default tags."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.project_name)) > 0
+    error_message = "project_name must not be empty."
+  }
+}
+
+variable "environment" {
+  description = "Deployment environment used in resource naming and default tags."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.environment)) > 0
+    error_message = "environment must not be empty."
+  }
 }
 
 variable "vpc_cidr" {
+  description = "VPC CIDR block."
   type        = string
-  description = "CIDR block for the VPC"
-  default     = "10.0.0.0/16"
-}
+  nullable    = false
 
-variable "private_subnet_cidr" {
-  type        = string
-  description = "CIDR block for the private subnet"
-  default     = "10.0.2.0/24"
+  validation {
+    condition     = can(cidrhost(var.vpc_cidr, 0))
+    error_message = "vpc_cidr must be a valid IPv4 CIDR block."
+  }
 }
 
 variable "public_subnet_cidr" {
+  description = "CIDR block for the public subnet."
   type        = string
-  description = "CIDR block for the public subnet"
-  default     = "10.0.1.0/24"
+  nullable    = false
+
+  validation {
+    condition     = can(cidrhost(var.public_subnet_cidr, 0))
+    error_message = "public_subnet_cidr must be a valid IPv4 CIDR block."
+  }
 }
 
-variable "default_cidr" {
+variable "private_subnet_cidr" {
+  description = "CIDR block for the private subnet."
   type        = string
-  description = "Default route destination CIDR (usually 0.0.0.0/0)"
-  default     = "0.0.0.0/0"
+  nullable    = false
+
+  validation {
+    condition     = can(cidrhost(var.private_subnet_cidr, 0))
+    error_message = "private_subnet_cidr must be a valid IPv4 CIDR block."
+  }
 }
 
-variable "common_tags" {
-  type        = map(string)
-  description = "Map of tags to apply to all resources (can be empty)"
-  default     = {}
-}
-
-variable "ssh_cidr" {
+variable "availability_zone" {
+  description = "Availability Zone used for the subnets."
   type        = string
-  description = "CIDR allowed for SSH access to bastions/control plane (restrict in production)"
-  default     = "0.0.0.0/0"
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.availability_zone)) > 0
+    error_message = "availability_zone must not be empty."
+  }
 }
 
-variable "web_cidr" {
+variable "ami_id" {
+  description = "Optional Ubuntu AMI ID override. When null, the latest Ubuntu 24.04 AMI is used automatically."
   type        = string
-  description = "CIDR allowed for HTTP/HTTPS ingress to public services"
-  default     = "0.0.0.0/0"
+  default     = null
+
+  validation {
+    condition     = var.ami_id == null || length(trimspace(var.ami_id)) > 0
+    error_message = "ami_id must be null or a non-empty AMI ID."
+  }
 }
 
-variable "k8s_api_cidr" {
+variable "instance_type" {
+  description = "EC2 instance type used for control-plane and worker nodes."
   type        = string
-  description = "CIDR allowed to reach the Kubernetes API server"
-  default     = "10.0.0.0/16"
-}
+  nullable    = false
 
-variable "nodeport_cidr" {
-  type        = string
-  description = "CIDR allowed for NodePort range access (restrict in production)"
-  default     = "0.0.0.0/0"
-}
-
-variable "egress_cidr" {
-  type        = string
-  description = "CIDR used for egress rules (default allows all outbound)"
-  default     = "0.0.0.0/0"
-}
-
-variable "enable_nodeport" {
-  type        = bool
-  description = "Whether to allow NodePort range ingress on the security group"
-  default     = true
+  validation {
+    condition     = length(trimspace(var.instance_type)) > 0
+    error_message = "instance_type must not be empty."
+  }
 }
