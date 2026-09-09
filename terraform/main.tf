@@ -4,54 +4,38 @@ module "networking" {
   project_name = var.project_name
   environment  = var.environment
 
-  vpc_cidr            = var.vpc_cidr
-  public_subnet_cidr  = var.public_subnet_cidr
-  private_subnet_cidr = var.private_subnet_cidr
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
 
-  availability_zone = var.availability_zone
+  availability_zones = var.availability_zones
 }
 
-module "security" {
-  source = "./modules/security"
+module "ingress" {
+  source = "./modules/ingress"
 
   project_name = var.project_name
   environment  = var.environment
 
-  vpc_id = module.networking.vpc_id
+  vpc_id                = module.networking.vpc_id
+  public_subnet_ids     = module.networking.public_subnet_ids
+  certificate_arn       = var.alb_certificate_arn
+  allowed_ingress_cidrs = var.public_ingress_cidrs
 }
 
-module "bastion" {
-  source = "./modules/bastion"
-
-  project_name     = var.project_name
-  environment      = var.environment
-
-  vpc_id           = module.networking.vpc_id
-  public_subnet_id = module.networking.public_subnet_id
-
-  key_name         = module.compute.key_name
-  instance_type    = "t3.micro"
-}
-
-module "compute" {
-  source = "./modules/compute"
+module "eks" {
+  count  = var.enable_eks ? 1 : 0
+  source = "./modules/eks"
 
   project_name = var.project_name
   environment  = var.environment
 
-  private_subnet_id = module.networking.private_subnet_id
-  security_group_id = module.security.security_group_id
-
-  ami_id        = var.ami_id
-  instance_type = var.instance_type
-}
-
-resource "aws_security_group_rule" "ssh_from_bastion" {
-  type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  security_group_id        = module.security.security_group_id
-  source_security_group_id = module.bastion.bastion_security_group_id
-  description              = "Allow SSH from Bastion SG"
+  vpc_id                   = module.networking.vpc_id
+  private_subnet_ids       = module.networking.private_subnet_ids
+  cluster_api_access_cidrs = var.admin_public_cidrs
+  cluster_log_types        = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  node_instance_type       = var.instance_type
+  node_desired_size        = 2
+  node_min_size            = 1
+  node_max_size            = 3
 }
