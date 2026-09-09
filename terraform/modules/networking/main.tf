@@ -45,6 +45,25 @@ resource "aws_internet_gateway" "numeraid_igw" {
   })
 }
 
+resource "aws_eip" "nat" {
+  domain = "vpc"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-${var.environment}-nat-eip"
+  })
+}
+
+resource "aws_nat_gateway" "this" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.numeraid_public_subnet.id
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-${var.environment}-nat"
+  })
+
+  depends_on = [aws_internet_gateway.numeraid_igw]
+}
+
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.numeraid_vpc.id
 
@@ -54,11 +73,29 @@ resource "aws_route_table" "public" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "${var.project_name}-${var.environment}-rt"
+    Name = "${var.project_name}-${var.environment}-public-rt"
+  })
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.numeraid_vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.this.id
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-${var.environment}-private-rt"
   })
 }
 
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.numeraid_public_subnet.id
   route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.numeraid_private_subnet.id
+  route_table_id = aws_route_table.private.id
 }

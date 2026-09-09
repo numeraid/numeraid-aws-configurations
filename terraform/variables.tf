@@ -74,3 +74,25 @@ variable "availability_zone" {
     error_message = "availability_zone must not be empty."
   }
 }
+
+variable "ami_id" {
+  description = "Optional Ubuntu AMI ID override. When null, the latest Ubuntu 24.04 AMI is used automatically."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ami_id == null || length(trimspace(var.ami_id)) > 0
+    error_message = "ami_id must be null or a non-empty AMI ID."
+  }
+}
+
+variable "instance_type" {
+  description = "EC2 instance type used for control-plane and worker nodes."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.instance_type)) > 0
+    error_message = "instance_type must not be empty."
+  }
+}

@@ -10,3 +10,25 @@ module "networking" {
 
   availability_zone = var.availability_zone
 }
+
+module "security" {
+  source = "./modules/security"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  vpc_id = module.networking.vpc_id
+}
+
+module "compute" {
+  source = "./modules/compute"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  private_subnet_id = module.networking.private_subnet_id
+  security_group_id = module.security.security_group_id
+
+  ami_id        = var.ami_id
+  instance_type = var.instance_type
+}

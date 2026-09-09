@@ -27,3 +27,18 @@ output "public_route_table_id" {
   description = "Public route table ID."
   value       = aws_route_table.public.id
 }
+
+output "private_route_table_id" {
+  description = "Private route table ID."
+  value       = aws_route_table.private.id
+}
+
+output "nat_gateway_id" {
+  description = "NAT gateway ID used for outbound access from private subnets."
+  value       = aws_nat_gateway.this.id
+}
+
+output "nat_public_ip" {
+  description = "Elastic IP allocated to the NAT gateway."
+  value       = aws_eip.nat.public_ip
+}
