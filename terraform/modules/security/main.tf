@@ -16,17 +16,6 @@ resource "aws_security_group" "numeraid_k8s_sg" {
   })
 }
 
-resource "aws_vpc_security_group_ingress_rule" "ssh" {
-  security_group_id = aws_security_group.numeraid_k8s_sg.id
-
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 22
-  to_port     = 22
-  ip_protocol = "tcp"
-
-  description = "SSH access"
-}
-
 resource "aws_vpc_security_group_ingress_rule" "kubernetes_api" {
   security_group_id = aws_security_group.numeraid_k8s_sg.id
 

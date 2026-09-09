@@ -57,3 +57,9 @@ output "worker_node_id" {
   description = "The worker node instance ID created by the compute module."
   value       = module.compute.worker_node_id
 }
+
+output "private_key_pem" {
+  description = "Private key material used to SSH into the EC2 instances (sensitive)."
+  value       = module.compute.private_key_pem
+  sensitive   = true
+}
