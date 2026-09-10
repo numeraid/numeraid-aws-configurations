@@ -1,3 +1,11 @@
+/*
+
+- This root module composes the project by calling reusable child modules stored in ./modules.
+- Each child module is responsible for a specific infrastructure domain, such as networking, ingress, or EKS.
+- Data flows from the root module into child modules through input variables, and outputs can be passed back for reuse.
+
+*/
+
 module "networking" {
   source = "./modules/networking"
 
