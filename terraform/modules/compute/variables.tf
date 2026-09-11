@@ -31,6 +31,12 @@ variable "private_subnet_id" {
   }
 }
 
+variable "security_group_id" {
+  description = "Security Group ID for EC2 instances"
+  type        = string
+  nullable    = false
+}
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string

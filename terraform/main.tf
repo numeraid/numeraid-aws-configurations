@@ -11,6 +11,15 @@ module "networking" {
   availability_zone = var.availability_zone
 }
 
+module "security" {
+  source = "./modules/security"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  vpc_id = module.networking.vpc_id
+}
+
 module "compute" {
   source = "./modules/compute"
 
@@ -18,6 +27,8 @@ module "compute" {
   environment  = var.environment
 
   private_subnet_id = module.networking.private_subnet_id
+
+  security_group_id = module.security.k8s_instance_sg_id
 
   instance_type = var.instance_type
 }
