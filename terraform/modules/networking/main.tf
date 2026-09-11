@@ -61,3 +61,63 @@ resource "aws_route_table_association" "numeraid_private_subnet_rt_associate" {
   subnet_id      = aws_subnet.numeraid_private_subnet.id
   route_table_id = aws_route_table.numeraid_private_subnet_rt.id
 }
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id            = aws_vpc.numeraid_vpc.id
+  service_name      = "com.amazonaws.af-south-1.ssm"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = [
+    aws_subnet.numeraid_private_subnet.id
+  ]
+
+  security_group_ids = [
+    var.endpoint_security_group_id
+  ]
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ssm-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ssmmessages" {
+  vpc_id            = aws_vpc.numeraid_vpc.id
+  service_name      = "com.amazonaws.af-south-1.ssmmessages"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = [
+    aws_subnet.numeraid_private_subnet.id
+  ]
+
+  security_group_ids = [
+    var.endpoint_security_group_id
+  ]
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ssmmessages-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ec2messages" {
+  vpc_id            = aws_vpc.numeraid_vpc.id
+  service_name      = "com.amazonaws.af-south-1.ec2messages"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = [
+    aws_subnet.numeraid_private_subnet.id
+  ]
+
+  security_group_ids = [
+    var.endpoint_security_group_id
+  ]
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2messages-endpoint"
+  }
+}

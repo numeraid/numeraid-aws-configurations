@@ -1,6 +1,6 @@
 module "networking" {
   source = "./modules/networking"
-
+  
   project_name = var.project_name
   environment  = var.environment
 
@@ -9,6 +9,8 @@ module "networking" {
   private_subnet_cidr = var.private_subnet_cidr
 
   availability_zone = var.availability_zone
+
+  endpoint_security_group_id = module.security.vpc_endpoint_sg_id
 }
 
 module "iam" {
@@ -24,7 +26,8 @@ module "security" {
   project_name = var.project_name
   environment  = var.environment
 
-  vpc_id = module.networking.vpc_id
+  vpc_id   = module.networking.vpc_id
+  vpc_cidr = module.networking.vpc_cidr_block
 }
 
 module "compute" {

@@ -63,3 +63,8 @@ variable "availability_zone" {
     error_message = "availability_zone must not be empty."
   }
 }
+
+variable "endpoint_security_group_id" {
+  description = "Security group ID to attach to the VPC interface endpoints."
+  type        = string
+}
