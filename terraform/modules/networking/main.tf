@@ -33,3 +33,31 @@ resource "aws_subnet" "numeraid_private_subnet" {
     Name = "${var.project_name}-${var.environment}-private-subnet"
   })
 }
+
+resource "aws_route_table" "numeraid_public_subnet_rt" {
+  vpc_id = aws_vpc.numeraid_vpc.id
+
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-${var.environment}-public-subnet-rt"
+  })
+}
+
+resource "aws_route_table" "numeraid_private_subnet_rt" {
+  vpc_id = aws_vpc.numeraid_vpc.id
+
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-${var.environment}-private-subnet-rt"
+  })
+}
+
+resource "aws_route_table_association" "numeraid_public_subnet_rt_associate" {
+  subnet_id      = aws_subnet.numeraid_public_subnet.id
+  route_table_id = aws_route_table.numeraid_public_subnet_rt.id
+}
+
+resource "aws_route_table_association" "numeraid_private_subnet_rt_associate" {
+  subnet_id      = aws_subnet.numeraid_private_subnet.id
+  route_table_id = aws_route_table.numeraid_private_subnet_rt.id
+}
