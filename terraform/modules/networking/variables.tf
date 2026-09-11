@@ -64,7 +64,3 @@ variable "availability_zone" {
   }
 }
 
-variable "endpoint_security_group_id" {
-  description = "Security group ID to attach to the VPC interface endpoints."
-  type        = string
-}

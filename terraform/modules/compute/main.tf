@@ -1,9 +1,6 @@
 resource "aws_instance" "numeraid_k8s_cp" {
-  ami       = data.aws_ami.ubuntu.id
-  subnet_id = var.private_subnet_id
-
-  iam_instance_profile = var.instance_profile_name
-
+  ami           = data.aws_ami.ubuntu.id
+  subnet_id     = var.private_subnet_id
   instance_type = var.instance_type
 
   vpc_security_group_ids = [
@@ -16,11 +13,8 @@ resource "aws_instance" "numeraid_k8s_cp" {
 }
 
 resource "aws_instance" "numeraid_k8s_wn" {
-  ami       = data.aws_ami.ubuntu.id
-  subnet_id = var.private_subnet_id
-
-  iam_instance_profile = var.instance_profile_name
-
+  ami           = data.aws_ami.ubuntu.id
+  subnet_id     = var.private_subnet_id
   instance_type = var.instance_type
 
   vpc_security_group_ids = [

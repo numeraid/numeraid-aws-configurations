@@ -31,11 +31,6 @@ variable "environment" {
   }
 }
 
-variable "instance_profile_name" {
-  description = "SSM Instance Profile"
-  type        = string
-}
-
 variable "vpc_cidr" {
   description = "CIDR block for the VPC."
   type        = string

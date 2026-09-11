@@ -20,10 +20,6 @@ variable "environment" {
   }
 }
 
-variable "instance_profile_name" {
-  description = "SSM Instance Profile"
-  type        = string
-}
 
 variable "private_subnet_id" {
   description = "Private subnet ID where compute instances will be placed."
