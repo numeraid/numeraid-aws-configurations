@@ -10,3 +10,14 @@ module "networking" {
 
   availability_zone = var.availability_zone
 }
+
+module "compute" {
+  source = "./modules/compute"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  private_subnet_id = module.networking.private_subnet_id
+
+  instance_type = var.instance_type
+}

@@ -74,3 +74,8 @@ variable "availability_zone" {
     error_message = "availability_zone must not be empty."
   }
 }
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+}

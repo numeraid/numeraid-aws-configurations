@@ -17,3 +17,15 @@ output "private_subnet_id" {
   description = "The primary private subnet ID created by the networking module."
   value       = module.networking.private_subnet_id
 }
+
+output "instance_id" {
+  value = module.compute.instance_id
+}
+
+output "private_ip" {
+  value = module.compute.private_ip
+}
+
+output "instance_state" {
+  value = module.compute.instance_state
+}
