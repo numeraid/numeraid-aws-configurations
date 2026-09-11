@@ -59,7 +59,7 @@ variable "availability_zones" {
   nullable    = false
 
   validation {
-    condition     = length(var.availability_zones) >= 2 && alltrue([for az in var.availability_zones : length(trimspace(az)) > 0])
+    condition     = length(var.availability_zones) == 1 && alltrue([for az in var.availability_zones : length(trimspace(az)) > 0])
     error_message = "availability_zones must contain at least two non-empty availability zone names."
   }
 }
