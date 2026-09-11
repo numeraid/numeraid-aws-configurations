@@ -32,34 +32,34 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnet_cidr" {
-  description = "CIDR blocks for public subnet in one availability zone."
-  type        = list(string)
+  description = "CIDR block for the public subnet."
+  type        = string
   nullable    = false
 
   validation {
-    condition     = length(var.public_subnet_cidr) >= 2 && alltrue([for cidr in var.public_subnet_cidr : can(cidrhost(cidr, 0))])
-    error_message = "public_subnet_cidr must contain at least one valid IPv4 CIDR block."
+    condition     = can(cidrhost(var.public_subnet_cidr, 0))
+    error_message = "public_subnet_cidr must be a valid IPv4 CIDR block."
   }
 }
 
 variable "private_subnet_cidr" {
-  description = "CIDR blocks for private subnets in one availability zone."
-  type        = list(string)
+  description = "CIDR block for the private subnet."
+  type        = string
   nullable    = false
 
   validation {
-    condition     = length(var.private_subnet_cidr) >= 2 && alltrue([for cidr in var.private_subnet_cidr : can(cidrhost(cidr, 0))])
-    error_message = "private_subnet_cidr must contain at least one valid IPv4 CIDR block."
+    condition     = can(cidrhost(var.private_subnet_cidr, 0))
+    error_message = "private_subnet_cidr must be a valid IPv4 CIDR block."
   }
 }
 
 variable "availability_zone" {
-  description = "Availability zone for the subnets."
-  type        = list(string)
+  description = "Availability Zone for the subnets."
+  type        = string
   nullable    = false
 
   validation {
-    condition     = length(var.availability_zone) == 1 && alltrue([for az in var.availability_zone : length(trimspace(az)) > 0])
-    error_message = "availability_zone must contain at least one non-empty availability zone name."
+    condition     = trimspace(var.availability_zone) != ""
+    error_message = "availability_zone must not be empty."
   }
 }
