@@ -1,14 +1,3 @@
-locals {
-  common_tags = merge(
-    {
-      Name        = var.name
-      ManagedBy   = "Terraform"
-      Environment = var.environment
-    },
-    var.tags,
-  )
-}
-
 resource "aws_vpc" "this" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
@@ -98,19 +87,4 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private.id
-}
-
-output "vpc_id" {
-  description = "ID of the created VPC"
-  value       = aws_vpc.this.id
-}
-
-output "public_subnet_ids" {
-  description = "List of public subnet IDs"
-  value       = values(aws_subnet.public)[*].id
-}
-
-output "private_subnet_ids" {
-  description = "List of private subnet IDs"
-  value       = values(aws_subnet.private)[*].id
 }
